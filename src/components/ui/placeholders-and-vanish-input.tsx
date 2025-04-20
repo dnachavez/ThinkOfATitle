@@ -1,6 +1,6 @@
 "use client";
 
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, motion } from "framer-motion";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
@@ -52,6 +52,7 @@ export function PlaceholdersAndVanishInput({
   const inputRef = useRef<HTMLInputElement>(null);
   const [value, setValue] = useState("");
   const [animating, setAnimating] = useState(false);
+  const [submitAnimation, setSubmitAnimation] = useState(false);
 
   useEffect(() => {
     if (triggerVanish && value && !animating) {
@@ -162,6 +163,8 @@ export function PlaceholdersAndVanishInput({
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && !animating) {
+      setSubmitAnimation(true);
+      setTimeout(() => setSubmitAnimation(false), 300);
       vanishAndSubmit();
     }
   };
@@ -180,6 +183,8 @@ export function PlaceholdersAndVanishInput({
     }
 
     if (submitForm && onSubmit) {
+      setSubmitAnimation(true);
+      setTimeout(() => setSubmitAnimation(false), 300);
       const event = new Event("submit", { bubbles: true, cancelable: true }) as unknown as React.FormEvent<HTMLFormElement>;
       onSubmit(event);
     }
@@ -191,21 +196,25 @@ export function PlaceholdersAndVanishInput({
   };
 
   return (
-    <form
+    <motion.form
       className={cn(
-        "w-full relative max-w-xl mx-auto bg-white dark:bg-zinc-800 h-12 rounded-full overflow-hidden shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),_0px_1px_0px_0px_rgba(25,28,33,0.02),_0px_0px_0px_1px_rgba(25,28,33,0.08)] transition duration-200",
+        "w-full relative max-w-xl mx-auto bg-white dark:bg-zinc-800 h-12 rounded-full overflow-hidden shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),_0px_1px_0px_0px_rgba(25,28,33,0.02),_0px_0px_0px_1px_rgba(25,28,33,0.08)] transition-all duration-200",
         value && "bg-gray-50"
       )}
       onSubmit={handleSubmit}
+      animate={{
+        scale: submitAnimation ? 0.98 : 1,
+        transition: { type: "spring", stiffness: 500, damping: 15 }
+      }}
     >
       <canvas
         className={cn(
-          "absolute pointer-events-none  text-base transform scale-50 top-[20%] left-2 sm:left-8 origin-top-left filter invert dark:invert-0 pr-20",
+          "absolute pointer-events-none text-base transform scale-50 top-[20%] left-2 sm:left-8 origin-top-left filter invert dark:invert-0 pr-20",
           !animating ? "opacity-0" : "opacity-100"
         )}
         ref={canvasRef}
       />
-      <input
+      <motion.input
         onChange={(e) => {
           if (!animating) {
             setValue(e.target.value);
@@ -220,12 +229,24 @@ export function PlaceholdersAndVanishInput({
           "w-full relative text-sm sm:text-base z-50 border-none dark:text-white bg-transparent text-black h-full rounded-full focus:outline-none focus:ring-0 pl-4 sm:pl-10 pr-20",
           animating && "text-transparent dark:text-transparent"
         )}
+        animate={{ 
+          x: submitAnimation ? [-2, 2, -2, 2, 0] : 0,
+          transition: { duration: 0.3 }
+        }}
       />
 
-      <button
+      <motion.button
         disabled={!value}
         type="submit"
-        className="absolute right-2 top-1/2 z-50 -translate-y-1/2 h-8 w-8 rounded-full disabled:bg-gray-100 bg-black dark:bg-zinc-900 dark:disabled:bg-zinc-800 transition duration-200 flex items-center justify-center"
+        whileHover={!value ? {} : { scale: 1.05, backgroundColor: "#000" }}
+        whileTap={!value ? {} : { scale: 0.95 }}
+        className="absolute right-2 top-1/2 z-50 -translate-y-1/2 h-8 w-8 rounded-full disabled:bg-gray-100 bg-black dark:bg-zinc-900 dark:disabled:bg-zinc-800 transition-all duration-200 flex items-center justify-center"
+        onClick={() => {
+          if (value) {
+            setSubmitAnimation(true);
+            setTimeout(() => setSubmitAnimation(false), 300);
+          }
+        }}
       >
         <motion.svg
           xmlns="http://www.w3.org/2000/svg"
@@ -238,6 +259,11 @@ export function PlaceholdersAndVanishInput({
           strokeLinecap="round"
           strokeLinejoin="round"
           className="text-gray-300 h-4 w-4"
+          animate={{
+            rotate: submitAnimation ? [0, 15, 0] : 0,
+            scale: submitAnimation ? [1, 1.2, 1] : 1,
+            transition: { duration: 0.3 }
+          }}
         >
           <path stroke="none" d="M0 0h24v24H0z" fill="none" />
           <motion.path
@@ -254,16 +280,33 @@ export function PlaceholdersAndVanishInput({
               ease: "linear",
             }}
           />
-          <path d="M13 18l6 -6" />
-          <path d="M13 6l6 6" />
+          <motion.path 
+            d="M13 18l6 -6" 
+            animate={{
+              pathLength: submitAnimation ? [0, 1, 0] : 1,
+              transition: { duration: 0.3 }
+            }}
+          />
+          <motion.path 
+            d="M13 6l6 6"
+            animate={{
+              pathLength: submitAnimation ? [0, 1, 0] : 1,
+              transition: { duration: 0.3 }
+            }}
+          />
         </motion.svg>
-      </button>
+      </motion.button>
 
       <div className="absolute inset-0 flex items-center rounded-full pointer-events-none">
         <AnimatePresence mode="wait">
           {!value && (
             <div className="flex dark:text-zinc-500 text-sm sm:text-base font-normal text-neutral-500 pl-4 sm:pl-12 text-left w-[calc(100%-2rem)] truncate">
-              <span className="mr-1">{fixedPrefix}</span>
+              <motion.span 
+                className="mr-1"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.1 }}
+              >{fixedPrefix}</motion.span>
               <motion.span
                 initial={{
                   y: 5,
@@ -279,8 +322,9 @@ export function PlaceholdersAndVanishInput({
                   opacity: 0,
                 }}
                 transition={{
-                  duration: 0.3,
-                  ease: "linear",
+                  type: "spring",
+                  stiffness: 300,
+                  damping: 20,
                 }}
               >
                 {placeholders[currentPlaceholder]}
@@ -289,6 +333,6 @@ export function PlaceholdersAndVanishInput({
           )}
         </AnimatePresence>
       </div>
-    </form>
+    </motion.form>
   );
 }
