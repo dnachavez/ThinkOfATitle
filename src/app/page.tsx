@@ -75,20 +75,16 @@ function ThinkOfATitle() {
   };
   
   const handleReset = () => {
-    // Block any operations if already resetting
     if (isResetting) return;
 
-    // Add smooth transition for reset
     setIsResetting(true);
     
     router.replace("/", { scroll: false });
     
-    // Small timeout to allow router update to complete
     setTimeout(() => {
       setInputValue("");
       resetSuggestions();
       
-      // Reset the resetting state after the transition completes
       setTimeout(() => {
         setIsResetting(false);
       }, 500);
