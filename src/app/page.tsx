@@ -24,7 +24,7 @@ function SuggestionButton({ emoji, text, onClick }: { emoji: string; text: strin
   );
 }
 
-export function ThinkOfATitle() {
+function ThinkOfATitle() {
   const [inputValue, setInputValue] = useState("");
   const [isResetting, setIsResetting] = useState(false);
   const router = useRouter();
