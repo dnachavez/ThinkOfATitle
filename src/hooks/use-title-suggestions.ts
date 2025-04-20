@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { generateContent } from '@/services/gemini-api';
 import { TitlePaperSuggestion } from '@/types/title-suggestion';
 import { parseGeminiResponse } from '@/utils/parse-gemini-response';
@@ -9,7 +9,7 @@ export function useTitleSuggestions() {
   const [error, setError] = useState<string | null>(null);
   const [submittedQuery, setSubmittedQuery] = useState('');
 
-  const fetchSuggestions = async (query: string) => {
+  const fetchSuggestions = useCallback(async (query: string) => {
     setIsLoading(true);
     setError(null);
     setSubmittedQuery(query);
@@ -29,13 +29,13 @@ export function useTitleSuggestions() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
-  const resetSuggestions = () => {
+  const resetSuggestions = useCallback(() => {
     setSuggestions([]);
     setSubmittedQuery('');
     setError(null);
-  };
+  }, []);
 
   return {
     suggestions,

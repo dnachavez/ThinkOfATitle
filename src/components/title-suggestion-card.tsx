@@ -100,7 +100,7 @@ export function TitleSuggestionCard({ suggestions }: TitleSuggestionCardProps) {
         variants={stagger}
         className="max-w-lg w-full gap-2"
       >
-        {suggestions.map((suggestion, index) => (
+        {suggestions.map((suggestion) => (
           <motion.div
             variants={slideUp}
             layoutId={`card-${suggestion.title}-${id}`}

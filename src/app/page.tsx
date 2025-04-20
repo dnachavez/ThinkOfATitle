@@ -6,7 +6,7 @@ import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-van
 import { TitleSuggestionCard } from "@/components/title-suggestion-card";
 import { useTitleSuggestions } from "@/hooks/use-title-suggestions";
 import { AnimatePresence, motion } from "framer-motion";
-import { AnimatedButton, fadeIn, slideUp, stagger } from "@/components/ui/animations";
+import { AnimatedButton, slideUp, stagger } from "@/components/ui/animations";
 import { CardSkeleton } from "@/components/ui/skeleton";
 
 export default function Home() {
@@ -40,11 +40,11 @@ function ThinkOfATitle() {
 
   useEffect(() => {
     const queryParam = searchParams.get("q");
-    if (queryParam) {
+    if (queryParam && queryParam !== submittedQuery) {
       setInputValue(queryParam);
       fetchSuggestions(queryParam);
     }
-  }, []);
+  }, [searchParams, fetchSuggestions, submittedQuery]);
 
   const placeholders = [
     "for a doctoral dissertation",
@@ -75,20 +75,24 @@ function ThinkOfATitle() {
   };
   
   const handleReset = () => {
+    // Block any operations if already resetting
+    if (isResetting) return;
+
     // Add smooth transition for reset
     setIsResetting(true);
     
-    // Small timeout to allow animation to start before state changes
+    router.replace("/", { scroll: false });
+    
+    // Small timeout to allow router update to complete
     setTimeout(() => {
-      resetSuggestions();
       setInputValue("");
-      router.push("/", { scroll: false });
+      resetSuggestions();
       
       // Reset the resetting state after the transition completes
       setTimeout(() => {
         setIsResetting(false);
       }, 500);
-    }, 50);
+    }, 100);
   };
 
   const handleRegenerate = () => {
