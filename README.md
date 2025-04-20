@@ -1,36 +1,117 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<p align="center">
+  <a href="https://thinkofatitle.dnachavez.dev" rel="noopener">
+ <img width=200px height=200px src="public/favicon.svg" alt="ThinkOfATitle logo"></a>
+</p>
 
-## Getting Started
+<h1 align="center">ThinkOfATitle</h1>
 
-First, run the development server:
+<div align="center">
 
+[![Status](https://img.shields.io/badge/status-active-success.svg)]()
+[![GitHub Issues](https://img.shields.io/github/issues/dnachavez/ThinkOfATitle.svg)](https://github.com/dnachavez/ThinkOfATitle/issues)
+[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/dnachavez/ThinkOfATitle.svg)](https://github.com/dnachavez/ThinkOfATitle/pulls)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
+
+</div>
+
+---
+
+<p align="center"> 
+  ThinkOfATitle is an AI-powered tool that helps you generate creative and professional titles for academic papers, dissertations, theses, and research documents.
+  <br> 
+</p>
+
+## 📝 Table of Contents
+
+- [About](#about)
+- [Features](#features)
+- [Getting Started](#getting_started)
+- [Technology Stack](#technology_stack)
+- [Usage](#usage)
+- [Deployment](#deployment)
+- [Contributing](#contributing)
+- [Author](#author)
+
+## 🧐 About <a name="about"></a>
+
+ThinkOfATitle leverages Google's Gemini AI to generate compelling titles and brief overviews for academic research papers, theses, and dissertations. It's designed to help researchers, students, and academics quickly brainstorm title ideas for their work based on their research topic or field.
+
+## ✨ Features <a name="features"></a>
+
+- **AI-Generated Titles**: Get creative and professional title suggestions using Gemini 2.0 Flash
+- **Brief Overviews**: Each title comes with a brief description of what the research could focus on
+
+## 🏁 Getting Started <a name="getting_started"></a>
+
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+
+### Prerequisites
+
+- Node.js (v18 or higher)
+- npm or yarn
+- Google Gemini API key
+
+### Installing
+
+1. Clone the repository
+```bash
+git clone https://github.com/dnachavez/thinkofatitle.git
+cd thinkofatitle
+```
+
+2. Install dependencies
+```bash
+npm install
+# or
+yarn install
+```
+
+3. Set up environment variables
+Create a `.env.local` file in the root directory with the following variables:
+```
+NEXT_PUBLIC_GEMINI_API_KEY=your_gemini_api_key_here
+```
+
+4. Start the development server
 ```bash
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+5. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🔧 Technology Stack <a name="technology_stack"></a>
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- [Next.js](https://nextjs.org/) - React framework
+- [TypeScript](https://www.typescriptlang.org/) - Type safety
+- [Tailwind CSS](https://tailwindcss.com/) - Styling
+- [Motion One](https://motion.dev/) - Animations
+- [Aceternity UI](https://ui.aceternity.com/) - UI Components
+- [Google Gemini API](https://ai.google.dev/docs/gemini_api) - AI title generation
 
-## Learn More
+## 🎈 Usage <a name="usage"></a>
 
-To learn more about Next.js, take a look at the following resources:
+1. Enter your research topic or field in the search bar
+2. Get AI-generated title suggestions
+3. Click on any suggestion to see the full title and its brief overview
+4. Use the "Reset" button to start a new search
+5. Use the "Regenerate" button to get new suggestions for the same topic
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🚀 Deployment <a name="deployment"></a>
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The project can be deployed on Vercel:
 
-## Deploy on Vercel
+```bash
+npm run build
+# or
+vercel deploy
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🤝 Contributing <a name="contributing"></a>
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## ✍️ Author <a name="author"></a>
+
+- [@dnachavez](https://github.com/dnachavez) - Initial work
