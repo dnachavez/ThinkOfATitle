@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
 import { TitleSuggestionCard } from "@/components/title-suggestion-card";
@@ -10,7 +10,33 @@ import { AnimatedButton, slideUp, stagger } from "@/components/ui/animations";
 import { CardSkeleton } from "@/components/ui/skeleton";
 
 export default function Home() {
-  return <ThinkOfATitle />;
+  return (
+    <Suspense fallback={<LoadingState />}>
+      <ThinkOfATitle />
+    </Suspense>
+  );
+}
+
+function LoadingState() {
+  return (
+    <motion.div 
+      className="h-screen w-full flex flex-col justify-center items-center px-4"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
+      <motion.div className="w-full max-w-xl mx-auto text-center">
+        <motion.h2 
+          className="mb-8 text-4xl sm:text-7xl text-center dark:text-white text-black font-bold transition-all duration-300"
+        >
+          ThinkOfATitle
+        </motion.h2>
+        <div className="w-full max-w-xl mx-auto">
+          <CardSkeleton />
+        </div>
+      </motion.div>
+    </motion.div>
+  );
 }
 
 function SuggestionButton({ emoji, text, onClick }: { emoji: string; text: string; onClick: () => void }) {
