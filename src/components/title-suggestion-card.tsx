@@ -30,6 +30,15 @@ export function TitleSuggestionCard({ suggestions }: TitleSuggestionCardProps) {
 
   useOutsideClick(ref as React.RefObject<HTMLDivElement>, () => setActive(null));
 
+  const getSuggestionCardHeight = () => {
+    return 88;
+  };
+  
+  const getMaxHeight = () => {
+    const heightPerCard = getSuggestionCardHeight();
+    return `${heightPerCard * 3}px`;
+  };
+
   return (
     <>
       <AnimatePresence>
@@ -94,37 +103,46 @@ export function TitleSuggestionCard({ suggestions }: TitleSuggestionCardProps) {
           </div>
         ) : null}
       </AnimatePresence>
-      <motion.ul
+      <motion.div
         initial="hidden"
         animate="visible"
         variants={stagger}
-        className="max-w-lg w-full gap-2"
+        className="max-w-lg w-full"
+        style={{
+          maxHeight: suggestions.length > 3 ? getMaxHeight() : 'auto',
+          overflowY: suggestions.length > 3 ? 'auto' : 'visible',
+        }}
       >
-        {suggestions.map((suggestion) => (
-          <motion.div
-            variants={slideUp}
-            layoutId={`card-${suggestion.title}-${id}`}
-            key={`card-${suggestion.title}-${id}`}
-            onClick={() => setActive(suggestion)}
-            whileHover={{ scale: 1.02, backgroundColor: "rgba(0,0,0,0.02)" }}
-            whileTap={{ scale: 0.98 }}
-            transition={{ type: "spring", stiffness: 400, damping: 17 }}
-            className="p-3 flex justify-between rounded-xl cursor-pointer border border-gray-100 dark:border-gray-800 mb-2 dark:hover:bg-neutral-800"
-          >
-            <div className="flex flex-col w-full">
-              <motion.h3
-                layoutId={`title-${suggestion.title}-${id}`}
-                className="font-medium text-neutral-800 dark:text-neutral-200"
-              >
-                {suggestion.title}
-              </motion.h3>
-              <p className="text-neutral-500 dark:text-neutral-400 text-xs mt-1 truncate">
-                {suggestion.briefOverview}
-              </p>
-            </div>
-          </motion.div>
-        ))}
-      </motion.ul>
+        <motion.ul
+          variants={stagger}
+          className="w-full gap-2"
+        >
+          {suggestions.map((suggestion) => (
+            <motion.div
+              variants={slideUp}
+              layoutId={`card-${suggestion.title}-${id}`}
+              key={`card-${suggestion.title}-${id}`}
+              onClick={() => setActive(suggestion)}
+              whileHover={{ scale: 1.02, backgroundColor: "rgba(0,0,0,0.02)" }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ type: "spring", stiffness: 400, damping: 17 }}
+              className="p-3 flex justify-between rounded-xl cursor-pointer border border-gray-100 dark:border-gray-800 mb-2 dark:hover:bg-neutral-800"
+            >
+              <div className="flex flex-col w-full">
+                <motion.h3
+                  layoutId={`title-${suggestion.title}-${id}`}
+                  className="font-medium text-neutral-800 dark:text-neutral-200"
+                >
+                  {suggestion.title}
+                </motion.h3>
+                <p className="text-neutral-500 dark:text-neutral-400 text-xs mt-1 truncate">
+                  {suggestion.briefOverview}
+                </p>
+              </div>
+            </motion.div>
+          ))}
+        </motion.ul>
+      </motion.div>
     </>
   );
 }
