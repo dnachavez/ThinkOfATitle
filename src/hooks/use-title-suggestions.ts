@@ -1,13 +1,13 @@
-import { useState, useCallback } from 'react';
-import { generateContent } from '@/services/gemini-api';
-import { TitlePaperSuggestion } from '@/types/title-suggestion';
-import { parseGeminiResponse } from '@/utils/parse-gemini-response';
+import { useState, useCallback } from "react";
+import { generateContent } from "@/services/gemini-api";
+import { TitlePaperSuggestion } from "@/types/title-suggestion";
+import { parseGeminiResponse } from "@/utils/parse-gemini-response";
 
 export function useTitleSuggestions() {
   const [suggestions, setSuggestions] = useState<TitlePaperSuggestion[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [submittedQuery, setSubmittedQuery] = useState('');
+  const [submittedQuery, setSubmittedQuery] = useState("");
 
   const fetchSuggestions = useCallback(async (query: string) => {
     setIsLoading(true);
@@ -17,15 +17,15 @@ export function useTitleSuggestions() {
     try {
       const response = await generateContent(query);
       const parsedSuggestions = parseGeminiResponse(response);
-      
+
       if (parsedSuggestions.length === 0) {
-        throw new Error('No suggestions were returned');
+        throw new Error("No suggestions were returned");
       }
-      
+
       setSuggestions(parsedSuggestions);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An unknown error occurred');
-      console.error('Error fetching suggestions:', err);
+      setError(err instanceof Error ? err.message : "An unknown error occurred");
+      console.error("Error fetching suggestions:", err);
     } finally {
       setIsLoading(false);
     }
@@ -33,7 +33,7 @@ export function useTitleSuggestions() {
 
   const resetSuggestions = useCallback(() => {
     setSuggestions([]);
-    setSubmittedQuery('');
+    setSubmittedQuery("");
     setError(null);
   }, []);
 
@@ -43,6 +43,6 @@ export function useTitleSuggestions() {
     error,
     submittedQuery,
     fetchSuggestions,
-    resetSuggestions
+    resetSuggestions,
   };
 }

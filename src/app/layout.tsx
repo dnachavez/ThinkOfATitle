@@ -10,8 +10,15 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "Generate creative and professional titles | ThinkOfATitle",
-  description: "Generate creative and professional titles for your academic papers, dissertations, theses, and research documents",
-  keywords: ["title generator", "academic titles", "research paper titles", "thesis titles", "dissertation titles"],
+  description:
+    "Generate creative and professional titles for your academic papers, dissertations, theses, and research documents",
+  keywords: [
+    "title generator",
+    "academic titles",
+    "research paper titles",
+    "thesis titles",
+    "dissertation titles",
+  ],
   authors: [{ name: "dnachavez.dev" }],
   creator: "dnachavez.dev",
   publisher: "dnachavez.dev",
@@ -21,7 +28,8 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "Generate creative and professional titles | ThinkOfATitle",
-    description: "Generate creative and professional titles for your academic papers, dissertations, theses, and research documents",
+    description:
+      "Generate creative and professional titles for your academic papers, dissertations, theses, and research documents",
     type: "website",
     locale: "en_US",
     siteName: "ThinkOfATitle",
@@ -30,7 +38,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Generate creative and professional titles | ThinkOfATitle",
-    description: "Generate creative and professional titles for your academic papers, dissertations, theses, and research documents",
+    description:
+      "Generate creative and professional titles for your academic papers, dissertations, theses, and research documents",
   },
   robots: {
     index: true,
@@ -45,11 +54,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${inter.variable} antialiased`}
-      >
-        {children}
-      </body>
+      <body className={`${inter.variable} antialiased`}>{children}</body>
     </html>
   );
 }

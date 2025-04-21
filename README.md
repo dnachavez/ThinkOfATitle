@@ -54,12 +54,14 @@ These instructions will get you a copy of the project up and running on your loc
 ### Installing
 
 1. Clone the repository
+
 ```bash
 git clone https://github.com/dnachavez/thinkofatitle.git
 cd thinkofatitle
 ```
 
 2. Install dependencies
+
 ```bash
 npm install
 # or
@@ -67,12 +69,14 @@ yarn install
 ```
 
 3. Set up environment variables
-Create a `.env.local` file in the root directory with the following variables:
+   Create a `.env.local` file in the root directory with the following variables:
+
 ```
 NEXT_PUBLIC_GEMINI_API_KEY=your_gemini_api_key_here
 ```
 
 4. Start the development server
+
 ```bash
 npm run dev
 # or

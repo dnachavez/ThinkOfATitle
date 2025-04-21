@@ -9,11 +9,11 @@ export function parseGeminiResponse(response: GeminiResponse): TitlePaperSuggest
     }
 
     const textContent = response.candidates[0].content.parts[0].text;
-    
+
     const jsonString = textContent.replace(/```json\n|\n```|```/g, "");
-    
+
     const suggestions = JSON.parse(jsonString) as TitlePaperSuggestion[];
-    
+
     return suggestions;
   } catch (error) {
     console.error("Error parsing Gemini response:", error);

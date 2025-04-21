@@ -33,7 +33,7 @@ export function TitleSuggestionCard({ suggestions }: TitleSuggestionCardProps) {
   const getSuggestionCardHeight = () => {
     return 88;
   };
-  
+
   const getMaxHeight = () => {
     const heightPerCard = getSuggestionCardHeight();
     return `${heightPerCard * 3}px`;
@@ -109,14 +109,11 @@ export function TitleSuggestionCard({ suggestions }: TitleSuggestionCardProps) {
         variants={stagger}
         className="max-w-lg w-full"
         style={{
-          maxHeight: suggestions.length > 3 ? getMaxHeight() : 'auto',
-          overflowY: suggestions.length > 3 ? 'auto' : 'visible',
+          maxHeight: suggestions.length > 3 ? getMaxHeight() : "auto",
+          overflowY: suggestions.length > 3 ? "auto" : "visible",
         }}
       >
-        <motion.ul
-          variants={stagger}
-          className="w-full gap-2"
-        >
+        <motion.ul variants={stagger} className="w-full gap-2">
           {suggestions.map((suggestion) => (
             <motion.div
               variants={slideUp}

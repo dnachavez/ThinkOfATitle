@@ -50,7 +50,7 @@ export function PlaceholdersAndVanishInput({
   }, [handleVisibilityChange, startAnimation]);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const newDataRef = useRef<Array<{x: number; y: number; r: number; color: string}>>([]);
+  const newDataRef = useRef<Array<{ x: number; y: number; r: number; color: string }>>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const [value, setValue] = useState("");
   const [animating, setAnimating] = useState(false);
@@ -75,26 +75,17 @@ export function PlaceholdersAndVanishInput({
 
     const imageData = ctx.getImageData(0, 0, 800, 800);
     const pixelData = imageData.data;
-    const newData: Array<{x: number; y: number; color: number[]}> = [];
+    const newData: Array<{ x: number; y: number; color: number[] }> = [];
 
     for (let t = 0; t < 800; t++) {
       const i = 4 * t * 800;
       for (let n = 0; n < 800; n++) {
         const e = i + 4 * n;
-        if (
-          pixelData[e] !== 0 &&
-          pixelData[e + 1] !== 0 &&
-          pixelData[e + 2] !== 0
-        ) {
+        if (pixelData[e] !== 0 && pixelData[e + 1] !== 0 && pixelData[e + 2] !== 0) {
           newData.push({
             x: n,
             y: t,
-            color: [
-              pixelData[e],
-              pixelData[e + 1],
-              pixelData[e + 2],
-              pixelData[e + 3],
-            ],
+            color: [pixelData[e], pixelData[e + 1], pixelData[e + 2], pixelData[e + 3]],
           });
         }
       }
@@ -112,71 +103,77 @@ export function PlaceholdersAndVanishInput({
     draw();
   }, [value, draw]);
 
-  const vanishAndSubmit = useCallback((submitForm = true) => {
-    setAnimating(true);
-    draw();
+  const vanishAndSubmit = useCallback(
+    (submitForm = true) => {
+      setAnimating(true);
+      draw();
 
-    const animate = (start: number) => {
-      const animateFrame = (pos: number = 0) => {
-        requestAnimationFrame(() => {
-          const newArr = [];
-          for (let i = 0; i < newDataRef.current.length; i++) {
-            const current = newDataRef.current[i];
-            if (current.x < pos) {
-              newArr.push(current);
-            } else {
-              if (current.r <= 0) {
-                current.r = 0;
-                continue;
+      const animate = (start: number) => {
+        const animateFrame = (pos: number = 0) => {
+          requestAnimationFrame(() => {
+            const newArr = [];
+            for (let i = 0; i < newDataRef.current.length; i++) {
+              const current = newDataRef.current[i];
+              if (current.x < pos) {
+                newArr.push(current);
+              } else {
+                if (current.r <= 0) {
+                  current.r = 0;
+                  continue;
+                }
+                current.x += Math.random() > 0.5 ? 1 : -1;
+                current.y += Math.random() > 0.5 ? 1 : -1;
+                current.r -= 0.05 * Math.random();
+                newArr.push(current);
               }
-              current.x += Math.random() > 0.5 ? 1 : -1;
-              current.y += Math.random() > 0.5 ? 1 : -1;
-              current.r -= 0.05 * Math.random();
-              newArr.push(current);
             }
-          }
-          newDataRef.current = newArr;
-          const ctx = canvasRef.current?.getContext("2d");
-          if (ctx) {
-            ctx.clearRect(pos, 0, 800, 800);
-            newDataRef.current.forEach((t) => {
-              const { x: n, y: i, r: s, color: color } = t;
-              if (n > pos) {
-                ctx.beginPath();
-                ctx.rect(n, i, s, s);
-                ctx.fillStyle = color;
-                ctx.strokeStyle = color;
-                ctx.stroke();
-              }
-            });
-          }
-          if (newDataRef.current.length > 0) {
-            animateFrame(pos - 8);
-          } else {
-            setValue("");
-            setAnimating(false);
-          }
-        });
+            newDataRef.current = newArr;
+            const ctx = canvasRef.current?.getContext("2d");
+            if (ctx) {
+              ctx.clearRect(pos, 0, 800, 800);
+              newDataRef.current.forEach((t) => {
+                const { x: n, y: i, r: s, color: color } = t;
+                if (n > pos) {
+                  ctx.beginPath();
+                  ctx.rect(n, i, s, s);
+                  ctx.fillStyle = color;
+                  ctx.strokeStyle = color;
+                  ctx.stroke();
+                }
+              });
+            }
+            if (newDataRef.current.length > 0) {
+              animateFrame(pos - 8);
+            } else {
+              setValue("");
+              setAnimating(false);
+            }
+          });
+        };
+        animateFrame(start);
       };
-      animateFrame(start);
-    };
 
-    const currentValue = inputRef.current?.value || "";
-    if (currentValue && inputRef.current) {
-      const maxX = newDataRef.current.reduce(
-        (prev, current) => (current.x > prev ? current.x : prev),
-        0
-      );
-      animate(maxX);
-    }
+      const currentValue = inputRef.current?.value || "";
+      if (currentValue && inputRef.current) {
+        const maxX = newDataRef.current.reduce(
+          (prev, current) => (current.x > prev ? current.x : prev),
+          0
+        );
+        animate(maxX);
+      }
 
-    if (submitForm && onSubmit) {
-      setSubmitAnimation(true);
-      setTimeout(() => setSubmitAnimation(false), 300);
-      const event = new Event("submit", { bubbles: true, cancelable: true }) as unknown as React.FormEvent<HTMLFormElement>;
-      onSubmit(event);
-    }
-  }, [draw, onSubmit]);
+      if (submitForm && onSubmit) {
+        setSubmitAnimation(true);
+        setTimeout(() => setSubmitAnimation(false), 300);
+        const event = new Event("submit", {
+          bubbles: true,
+          cancelable: true,
+        }) as unknown as React.FormEvent<HTMLFormElement>;
+        onSubmit(event);
+      }
+    },
+    [draw, onSubmit]
+  );
 
   useEffect(() => {
     if (triggerVanish && value && !animating) {
@@ -206,7 +203,7 @@ export function PlaceholdersAndVanishInput({
       onSubmit={handleSubmit}
       animate={{
         scale: submitAnimation ? 0.98 : 1,
-        transition: { type: "spring", stiffness: 500, damping: 15 }
+        transition: { type: "spring", stiffness: 500, damping: 15 },
       }}
     >
       <canvas
@@ -231,9 +228,9 @@ export function PlaceholdersAndVanishInput({
           "w-full relative text-sm sm:text-base z-50 border-none dark:text-white bg-transparent text-black h-full rounded-full focus:outline-none focus:ring-0 pl-4 sm:pl-10 pr-20",
           animating && "text-transparent dark:text-transparent"
         )}
-        animate={{ 
+        animate={{
           x: submitAnimation ? [-2, 2, -2, 2, 0] : 0,
-          transition: { duration: 0.3 }
+          transition: { duration: 0.3 },
         }}
       />
 
@@ -264,7 +261,7 @@ export function PlaceholdersAndVanishInput({
           animate={{
             rotate: submitAnimation ? [0, 15, 0] : 0,
             scale: submitAnimation ? [1, 1.2, 1] : 1,
-            transition: { duration: 0.3 }
+            transition: { duration: 0.3 },
           }}
         >
           <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -282,18 +279,18 @@ export function PlaceholdersAndVanishInput({
               ease: "linear",
             }}
           />
-          <motion.path 
-            d="M13 18l6 -6" 
+          <motion.path
+            d="M13 18l6 -6"
             animate={{
               pathLength: submitAnimation ? [0, 1, 0] : 1,
-              transition: { duration: 0.3 }
+              transition: { duration: 0.3 },
             }}
           />
-          <motion.path 
+          <motion.path
             d="M13 6l6 6"
             animate={{
               pathLength: submitAnimation ? [0, 1, 0] : 1,
-              transition: { duration: 0.3 }
+              transition: { duration: 0.3 },
             }}
           />
         </motion.svg>
@@ -303,12 +300,14 @@ export function PlaceholdersAndVanishInput({
         <AnimatePresence mode="wait">
           {!value && (
             <div className="flex dark:text-zinc-500 text-sm sm:text-base font-normal text-neutral-500 pl-4 sm:pl-12 text-left w-[calc(100%-2rem)] truncate">
-              <motion.span 
+              <motion.span
                 className="mr-1"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.1 }}
-              >{fixedPrefix}</motion.span>
+              >
+                {fixedPrefix}
+              </motion.span>
               <motion.span
                 initial={{
                   y: 5,
