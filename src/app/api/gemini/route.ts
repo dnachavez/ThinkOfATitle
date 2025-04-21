@@ -3,18 +3,14 @@ import { GeminiResponse, GeminiRequestContent } from "@/types/gemini-types";
 
 export async function POST(request: NextRequest) {
   try {
-    // Get the API key from server-side environment variable
     const apiKey = process.env.GEMINI_API_KEY;
 
-    // Return error if API key is not found
     if (!apiKey) {
       return NextResponse.json({ error: "API key not configured" }, { status: 500 });
     }
 
-    // Parse the request body
     const { userInput } = await request.json();
 
-    // Return error if userInput is missing
     if (!userInput || typeof userInput !== "string") {
       return NextResponse.json(
         { error: "Invalid request: userInput is required" },
@@ -22,7 +18,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Prepare the request for Gemini API
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
     const requestBody: GeminiRequestContent = {
@@ -55,7 +50,6 @@ Do not include any other text, explanations, or formatting in your response - on
       ],
     };
 
-    // Call Gemini API
     const response = await fetch(url, {
       method: "POST",
       headers: {
