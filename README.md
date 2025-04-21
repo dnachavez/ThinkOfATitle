@@ -72,7 +72,7 @@ yarn install
    Create a `.env.local` file in the root directory with the following variables:
 
 ```
-NEXT_PUBLIC_GEMINI_API_KEY=your_gemini_api_key_here
+GEMINI_API_KEY=your_gemini_api_key_here
 ```
 
 4. Start the development server
